@@ -21,6 +21,9 @@
                 <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
             </intent-filter>
         </activity>
+        <service
+            android:name=".DataService"
+            android:exported="false"/>
     </application>
 
 </manifest>

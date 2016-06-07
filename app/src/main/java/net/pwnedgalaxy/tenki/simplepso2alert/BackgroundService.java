@@ -1,6 +1,7 @@
 package net.pwnedgalaxy.tenki.simplepso2alert;
 
 import android.os.AsyncTask;
+import android.os.Handler;
 import android.widget.TextView;
 
 import java.io.BufferedReader;
@@ -8,6 +9,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * Created by Tenki on 5/30/2016.
@@ -59,4 +62,5 @@ public class BackgroundService extends AsyncTask<String, URL, String>{
 
        activity.showNotification(result);
     }
+
 }

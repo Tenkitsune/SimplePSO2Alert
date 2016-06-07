@@ -1,12 +1,16 @@
 package net.pwnedgalaxy.tenki.simplepso2alert;
 
+import android.app.AlarmManager;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.res.Resources;
 import android.net.Uri;
+import android.os.SystemClock;
 import android.support.annotation.DrawableRes;
 import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -15,6 +19,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.webkit.WebView;
+import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -27,12 +32,35 @@ import java.net.URL;
 
 public class MainActivity extends AppCompatActivity {
 
+
+    private ResponseReceiver receiver;
+    private PendingIntent pendingIntent;
+    private AlarmManager manager;
+    public View view;
+    String JSONin = "";
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        new BackgroundService(this).execute("http://www.pwnedgalaxy.net/pso2/?ship=10");
+        //new BackgroundService(this).execute("http://www.pwnedgalaxy.net/pso2/?ship=10");
+        //Intent serviceIntent = new Intent(this, DataService.class);
+        //startService(serviceIntent);
+
+        // Retrieve a PendingIntent that will perform a broadcast
+        //Intent alarmIntent = new Intent(this, AlarmReceiver.class);
+        //pendingIntent = PendingIntent.getBroadcast(this, 0, alarmIntent, 0);
+        //this.initiateAlarm(view);
+
+        IntentFilter filter = new IntentFilter(ResponseReceiver.ACTION_RESP);
+        filter.addCategory(Intent.CATEGORY_DEFAULT);
+        receiver = new ResponseReceiver();
+        registerReceiver(receiver, filter);
+
+
+
     }
 
     /** Called when the user touches the butt */
@@ -49,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
 
         //set up a connection to the page
 
-        /*try {
+        try {
             // Create a URL for the desired page
             URL url = new URL("http://www.pwnedgalaxy.net/pso2/eq/eqapi.php");
 
@@ -64,10 +92,10 @@ public class MainActivity extends AppCompatActivity {
             // leave this blank, should only happen if you fuck up the URL
         } catch (IOException e) {
             // Internet died or Pwned Galaxy died
-        }*/
+        }
 
 
-        //showNotification(JSONin);
+        showNotification(JSONin);
 
     }
 
@@ -118,5 +146,34 @@ public class MainActivity extends AppCompatActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+    }
+
+    /*
+    public void initiateAlarm(View view){
+        String alarm = Context.ALARM_SERVICE;
+        AlarmManager am = ( AlarmManager ) getSystemService( alarm );
+
+        Intent intent = new Intent( "PLS_REFRESH" );
+        PendingIntent pi = PendingIntent.getBroadcast( this, 0, intent, 0 );
+
+        int type = AlarmManager.ELAPSED_REALTIME_WAKEUP;
+        //long interval = AlarmManager.INTERVAL_FIFTEEN_MINUTES;
+        long interval = 1000; //1 secs for testing
+        long triggerTime = SystemClock.elapsedRealtime() + interval;
+
+        am.setRepeating( type, triggerTime, interval, pi );
+    }*/
+
+    public class ResponseReceiver extends BroadcastReceiver{
+        public static final String ACTION_RESP =
+                "net.pwnedgalaxy.tenki.simplepso2alert.intent.action.MESSAGE_PROCESSED";
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+
+            showNotification(JSONin);
+
+        }
+
     }
 }
