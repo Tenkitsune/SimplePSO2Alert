@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //new BackgroundService(this).execute("http://www.pwnedgalaxy.net/pso2/?ship=10");
+        new BackgroundService(this).execute("http://www.pwnedgalaxy.net/pso2/?ship=10");
         //Intent serviceIntent = new Intent(this, DataService.class);
         //startService(serviceIntent);
 
@@ -77,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
 
         //set up a connection to the page
 
-        try {
+        /*try {
             // Create a URL for the desired page
             URL url = new URL("http://www.pwnedgalaxy.net/pso2/eq/eqapi.php");
 
@@ -95,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
-        showNotification(JSONin);
+        showNotification(JSONin);*/
 
     }
 
